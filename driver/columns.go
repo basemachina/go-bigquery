@@ -11,11 +11,13 @@ import (
 type bigQuerySchema interface {
 	ColumnNames() []string
 	ConvertColumnValue(index int, value bigquery.Value) (driver.Value, error)
+	ColumnTypes() []string
 }
 
 type bigQueryColumns struct {
 	names   []string
 	columns []bigQueryColumn
+	types   []string
 }
 
 func (columns bigQueryColumns) ConvertColumnValue(index int, value bigquery.Value) (driver.Value, error) {
@@ -29,6 +31,10 @@ func (columns bigQueryColumns) ConvertColumnValue(index int, value bigquery.Valu
 
 func (columns bigQueryColumns) ColumnNames() []string {
 	return columns.names
+}
+
+func (columns bigQueryColumns) ColumnTypes() []string {
+	return columns.types
 }
 
 type bigQueryReroutedColumn struct {
@@ -74,6 +80,7 @@ func (column bigQueryColumn) ConvertValue(value bigquery.Value) (driver.Value, e
 func createBigQuerySchema(schema bigquery.Schema, schemaAdaptor adaptor.SchemaAdaptor) bigQuerySchema {
 	var names []string
 	var columns []bigQueryColumn
+	var types []string
 	for _, column := range schema {
 
 		name := column.Name
@@ -89,9 +96,11 @@ func createBigQuerySchema(schema bigquery.Schema, schemaAdaptor adaptor.SchemaAd
 			Schema:  column.Schema,
 			Adaptor: columnAdaptor,
 		})
+		types = append(types, string(column.Type))
 	}
 	return &bigQueryColumns{
 		names,
 		columns,
+		types,
 	}
 }
