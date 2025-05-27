@@ -1,3 +1,11 @@
+**This is forked from [go-gorm/bigquery](https://github.com/go-gorm/bigquery).**
+
+The following are the main changes that have been made:
+
+## Changes
+
+_To be written._
+
 #  BigQuery SQL Driver & GORM Dialect for Golang
 This is an implementation of the BigQuery Client as a database/sql/driver for easy integration and usage.
 
