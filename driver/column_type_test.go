@@ -10,9 +10,9 @@ import (
 func TestColumnTypeDatabaseTypeName(t *testing.T) {
 	rows := &bigQueryRows{
 		schema: bigQueryColumns{
-			types: []string{
-				string(bigquery.StringFieldType),
-				string(bigquery.NumericFieldType),
+			types: []bigquery.FieldType{
+				bigquery.StringFieldType,
+				bigquery.NumericFieldType,
 			},
 		},
 	}

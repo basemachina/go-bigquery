@@ -63,5 +63,5 @@ func (rows *bigQueryRows) ColumnTypeDatabaseTypeName(index int) string {
 	if index >= len(types) {
 		return outOfRangeErrorTypeName
 	}
-	return types[index]
+	return string(types[index])
 }

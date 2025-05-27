@@ -11,13 +11,13 @@ import (
 type bigQuerySchema interface {
 	ColumnNames() []string
 	ConvertColumnValue(index int, value bigquery.Value) (driver.Value, error)
-	ColumnTypes() []string
+	ColumnTypes() []bigquery.FieldType
 }
 
 type bigQueryColumns struct {
 	names   []string
 	columns []bigQueryColumn
-	types   []string
+	types   []bigquery.FieldType
 }
 
 func (columns bigQueryColumns) ConvertColumnValue(index int, value bigquery.Value) (driver.Value, error) {
@@ -33,7 +33,7 @@ func (columns bigQueryColumns) ColumnNames() []string {
 	return columns.names
 }
 
-func (columns bigQueryColumns) ColumnTypes() []string {
+func (columns bigQueryColumns) ColumnTypes() []bigquery.FieldType {
 	return columns.types
 }
 
@@ -80,7 +80,7 @@ func (column bigQueryColumn) ConvertValue(value bigquery.Value) (driver.Value, e
 func createBigQuerySchema(schema bigquery.Schema, schemaAdaptor adaptor.SchemaAdaptor) bigQuerySchema {
 	var names []string
 	var columns []bigQueryColumn
-	var types []string
+	var types []bigquery.FieldType
 	for _, column := range schema {
 
 		name := column.Name
@@ -96,7 +96,7 @@ func createBigQuerySchema(schema bigquery.Schema, schemaAdaptor adaptor.SchemaAd
 			Schema:  column.Schema,
 			Adaptor: columnAdaptor,
 		})
-		types = append(types, string(column.Type))
+		types = append(types, column.Type)
 	}
 	return &bigQueryColumns{
 		names,
