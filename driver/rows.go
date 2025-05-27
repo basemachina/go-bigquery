@@ -7,6 +7,8 @@ import (
 	"io"
 )
 
+const outOfRangeErrorTypeName = "ERR_OUT_OF_RANGE"
+
 type bigQueryRows struct {
 	source  bigQuerySource
 	schema  bigQuerySchema
@@ -59,7 +61,7 @@ func (rows *bigQueryRows) Next(dest []driver.Value) error {
 func (rows *bigQueryRows) ColumnTypeDatabaseTypeName(index int) string {
 	types := rows.schema.ColumnTypes()
 	if index >= len(types) {
-		return "ERR_OUT_OF_RANGE"
+		return outOfRangeErrorTypeName
 	}
 	return types[index]
 }
