@@ -20,7 +20,7 @@ func TestColumnTypeDatabaseTypeName(t *testing.T) {
 	testCases := map[int]string{
 		0: "STRING",
 		1: "NUMERIC",
-		2: outOfRangeErrorTypeName,
+		2: OutOfRangeErrorTypeName,
 	}
 	for index, expected := range testCases {
 		assert.Equal(t, expected, rows.ColumnTypeDatabaseTypeName(index))

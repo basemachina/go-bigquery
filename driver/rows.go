@@ -7,7 +7,8 @@ import (
 	"io"
 )
 
-const outOfRangeErrorTypeName = "ERR_OUT_OF_RANGE"
+// OutOfRangeErrorTypeName is returned when the column index is out of range.
+const OutOfRangeErrorTypeName = "ERR_OUT_OF_RANGE"
 
 type bigQueryRows struct {
 	source  bigQuerySource
@@ -61,7 +62,7 @@ func (rows *bigQueryRows) Next(dest []driver.Value) error {
 func (rows *bigQueryRows) ColumnTypeDatabaseTypeName(index int) string {
 	types := rows.schema.ColumnTypes()
 	if index >= len(types) {
-		return outOfRangeErrorTypeName
+		return OutOfRangeErrorTypeName
 	}
 	return string(types[index])
 }
