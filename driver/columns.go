@@ -11,7 +11,7 @@ import (
 type bigQuerySchema interface {
 	ColumnNames() []string
 	ConvertColumnValue(index int, value bigquery.Value) (driver.Value, error)
-	ColumnTypes() []bigquery.FieldType
+	columnTypes() []bigquery.FieldType
 }
 
 type bigQueryColumns struct {
@@ -33,7 +33,7 @@ func (columns bigQueryColumns) ColumnNames() []string {
 	return columns.names
 }
 
-func (columns bigQueryColumns) ColumnTypes() []bigquery.FieldType {
+func (columns bigQueryColumns) columnTypes() []bigquery.FieldType {
 	return columns.types
 }
 

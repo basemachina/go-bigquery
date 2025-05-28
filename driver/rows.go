@@ -58,6 +58,6 @@ func (rows *bigQueryRows) Next(dest []driver.Value) error {
 }
 
 func (rows *bigQueryRows) ColumnTypeDatabaseTypeName(index int) string {
-	types := rows.schema.ColumnTypes()
+	types := rows.schema.columnTypes()
 	return string(types[index])
 }
