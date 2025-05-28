@@ -2,9 +2,10 @@ package driver
 
 import (
 	"database/sql/driver"
+	"io"
+
 	"google.golang.org/api/iterator"
 	"gorm.io/driver/bigquery/adaptor"
-	"io"
 )
 
 type bigQueryRows struct {
@@ -52,4 +53,11 @@ func (rows *bigQueryRows) Next(dest []driver.Value) error {
 	}
 
 	return nil
+}
+
+var _ driver.RowsColumnTypeDatabaseTypeName = (*bigQueryRows)(nil)
+
+func (rows *bigQueryRows) ColumnTypeDatabaseTypeName(index int) string {
+	types := rows.schema.columnTypes()
+	return string(types[index])
 }
