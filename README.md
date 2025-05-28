@@ -4,7 +4,7 @@ The following are the main changes that have been made:
 
 ## Changes
 
-_To be written._
+- Implement a `ColumnTypeDatabaseTypeName` method to satisfy the [`driver.RowsColumnTypeDatabaseTypeName`](https://pkg.go.dev/database/sql/driver#RowsColumnTypeDatabaseTypeName) interface
 
 #  BigQuery SQL Driver & GORM Dialect for Golang
 This is an implementation of the BigQuery Client as a database/sql/driver for easy integration and usage.
