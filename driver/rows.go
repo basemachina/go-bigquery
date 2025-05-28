@@ -2,9 +2,10 @@ package driver
 
 import (
 	"database/sql/driver"
+	"io"
+
 	"google.golang.org/api/iterator"
 	"gorm.io/driver/bigquery/adaptor"
-	"io"
 )
 
 // OutOfRangeErrorTypeName is returned when the column index is out of range.
@@ -61,7 +62,7 @@ func (rows *bigQueryRows) Next(dest []driver.Value) error {
 
 func (rows *bigQueryRows) ColumnTypeDatabaseTypeName(index int) string {
 	types := rows.schema.ColumnTypes()
-	if index >= len(types) {
+	if index < 0 || index >= len(types) {
 		return OutOfRangeErrorTypeName
 	}
 	return string(types[index])
