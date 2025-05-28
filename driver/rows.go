@@ -14,8 +14,6 @@ type bigQueryRows struct {
 	adaptor adaptor.SchemaAdaptor
 }
 
-var _ driver.RowsColumnTypeDatabaseTypeName = &bigQueryRows{}
-
 func (rows *bigQueryRows) ensureSchema() {
 	if rows.schema == nil {
 		rows.schema = rows.source.GetSchema()
@@ -56,6 +54,8 @@ func (rows *bigQueryRows) Next(dest []driver.Value) error {
 
 	return nil
 }
+
+var _ driver.RowsColumnTypeDatabaseTypeName = (*bigQueryRows)(nil)
 
 func (rows *bigQueryRows) ColumnTypeDatabaseTypeName(index int) string {
 	types := rows.schema.columnTypes()
