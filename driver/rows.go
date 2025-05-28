@@ -8,9 +8,6 @@ import (
 	"gorm.io/driver/bigquery/adaptor"
 )
 
-// OutOfRangeErrorTypeName is returned when the column index is out of range.
-const OutOfRangeErrorTypeName = "ERR_OUT_OF_RANGE"
-
 type bigQueryRows struct {
 	source  bigQuerySource
 	schema  bigQuerySchema
@@ -62,8 +59,5 @@ func (rows *bigQueryRows) Next(dest []driver.Value) error {
 
 func (rows *bigQueryRows) ColumnTypeDatabaseTypeName(index int) string {
 	types := rows.schema.ColumnTypes()
-	if index < 0 || index >= len(types) {
-		return OutOfRangeErrorTypeName
-	}
 	return string(types[index])
 }
