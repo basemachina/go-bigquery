@@ -4,7 +4,7 @@ import (
 	"database/sql/driver"
 	"reflect"
 
-	"gorm.io/driver/bigquery/adaptor"
+	"github.com/basemachina/go-bigquery/adaptor"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )

@@ -6,8 +6,8 @@ import (
 	"errors"
 
 	"cloud.google.com/go/bigquery"
+	"github.com/basemachina/go-bigquery/adaptor"
 	"github.com/sirupsen/logrus"
-	"gorm.io/driver/bigquery/adaptor"
 )
 
 type bigQueryStatement struct {

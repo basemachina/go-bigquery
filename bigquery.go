@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"gorm.io/driver/bigquery/adaptor"
-	_ "gorm.io/driver/bigquery/driver"
+	"github.com/basemachina/go-bigquery/adaptor"
+	_ "github.com/basemachina/go-bigquery/driver"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/logger"

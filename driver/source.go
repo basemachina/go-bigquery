@@ -5,7 +5,7 @@ import (
 	"io"
 
 	"cloud.google.com/go/bigquery"
-	"gorm.io/driver/bigquery/adaptor"
+	"github.com/basemachina/go-bigquery/adaptor"
 )
 
 type bigQuerySource interface {
