@@ -3,9 +3,10 @@ package bigquery
 import (
 	"database/sql"
 	"database/sql/driver"
+	"reflect"
+
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-	"reflect"
 )
 
 func initializeBuilders(db *gorm.DB) {
