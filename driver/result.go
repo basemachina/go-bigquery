@@ -1,8 +1,9 @@
 package driver
 
 import (
-	"cloud.google.com/go/bigquery"
 	"errors"
+
+	"cloud.google.com/go/bigquery"
 )
 
 type bigQueryResult struct {

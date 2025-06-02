@@ -1,10 +1,11 @@
 package driver
 
 import (
-	"cloud.google.com/go/bigquery"
 	"context"
 	"database/sql/driver"
 	"fmt"
+
+	"cloud.google.com/go/bigquery"
 )
 
 type bigQueryConnection struct {

@@ -4,8 +4,8 @@ import (
 	"database/sql/driver"
 	"io"
 
+	"github.com/basemachina/go-bigquery/adaptor"
 	"google.golang.org/api/iterator"
-	"gorm.io/driver/bigquery/adaptor"
 )
 
 type bigQueryRows struct {
