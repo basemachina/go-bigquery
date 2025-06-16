@@ -7,6 +7,7 @@ import (
 
 	"cloud.google.com/go/bigquery"
 	"github.com/basemachina/go-bigquery/adaptor"
+	"github.com/goccy/go-zetasql"
 	"github.com/sirupsen/logrus"
 )
 
@@ -20,7 +21,11 @@ func (statement bigQueryStatement) Close() error {
 }
 
 func (statement bigQueryStatement) NumInput() int {
-	return 0
+	node, err := zetasql.ParseStatement(statement.query, nil)
+	if err != nil {
+		panic("failed to parse SQL statement with zetasql.ParseStatement")
+	}
+	return countQueryParameters(node)
 }
 
 func (bigQueryStatement) CheckNamedValue(*driver.NamedValue) error {
