@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	cloud.google.com/go/bigquery v1.57.1
+	github.com/goccy/go-zetasql v0.5.5
 	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.8.4
 	google.golang.org/api v0.155.0
