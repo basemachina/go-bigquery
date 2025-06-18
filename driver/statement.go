@@ -20,7 +20,7 @@ func (statement bigQueryStatement) Close() error {
 }
 
 func (statement bigQueryStatement) NumInput() int {
-	return 0
+	return -1
 }
 
 func (bigQueryStatement) CheckNamedValue(*driver.NamedValue) error {
