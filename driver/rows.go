@@ -2,8 +2,11 @@ package driver
 
 import (
 	"database/sql/driver"
+	"fmt"
 	"io"
+	"math/big"
 
+	"cloud.google.com/go/bigquery"
 	"github.com/basemachina/go-bigquery/adaptor"
 	"google.golang.org/api/iterator"
 )
@@ -45,7 +48,14 @@ func (rows *bigQueryRows) Next(dest []driver.Value) error {
 	var length = len(values)
 	for i := range dest {
 		if i < length {
-			dest[i], err = rows.schema.ConvertColumnValue(i, values[i])
+			value := values[i]
+
+			if str, ok := convertBaseMachinaUnsupportedValueToString(value); ok {
+				dest[i] = str
+				continue
+			}
+
+			dest[i], err = rows.schema.ConvertColumnValue(i, value)
 			if err != nil {
 				return err
 			}
@@ -53,6 +63,27 @@ func (rows *bigQueryRows) Next(dest []driver.Value) error {
 	}
 
 	return nil
+}
+
+// convertBaseMachinaUnsupportedValueToString converts values that are not supported by BaseMachina to strings.
+// It returns a string that represents the value and a boolean indicating if the conversion was successful.
+// If the conversion was not successful, the string is empty and the boolean is false.
+func convertBaseMachinaUnsupportedValueToString(value driver.Value) (string, bool) {
+	switch value := value.(type) {
+	// NUMERIC, BIGNUMERIC type
+	case *big.Rat:
+		return value.String(), true
+	// INTERVAL type
+	case *bigquery.IntervalValue:
+		return value.String(), true
+	// ARRAY or STRUCT type
+	case []bigquery.Value:
+		return "<ARRAY or STRUCT>", true
+	// RANGE type
+	case *bigquery.RangeValue:
+		return fmt.Sprintf("%v-%v", value.Start, value.End), true
+	}
+	return "", false
 }
 
 var _ driver.RowsColumnTypeDatabaseTypeName = (*bigQueryRows)(nil)
