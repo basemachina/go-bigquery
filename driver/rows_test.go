@@ -45,7 +45,7 @@ func TestConvertBaseMachinaUnsupportedValueToString(t *testing.T) {
 				Start: "2023-01-01",
 				End:   "2023-12-31",
 			},
-			wantString: "2023-01-01-2023-12-31",
+			wantString: "2023-01-01,2023-12-31",
 			wantBool:   true,
 		},
 	}

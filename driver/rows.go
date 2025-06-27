@@ -81,7 +81,7 @@ func convertBaseMachinaUnsupportedValueToString(value driver.Value) (string, boo
 		return "<ARRAY or STRUCT>", true
 	// RANGE type
 	case *bigquery.RangeValue:
-		return fmt.Sprintf("%v-%v", value.Start, value.End), true
+		return fmt.Sprintf("%v,%v", value.Start, value.End), true
 	}
 	return "", false
 }
