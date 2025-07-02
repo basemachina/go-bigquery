@@ -180,6 +180,18 @@ func buildParameter(arg driver.Value) bigquery.QueryParameter {
 		value = namedValue.Value
 	}
 
+	// Converts nil *float64 values to bigquery.NullFloat64.
+	// This is required by [bigquery.QueryParameter] to represent NULL values.
+	// Currently, this implementation only handles NULL support for float64,
+	// as BaseMachina only requires NULL handling for float64 at this time.
+	f, ok := value.(*float64)
+	if ok && f == nil {
+		value = bigquery.NullFloat64{
+			Valid:   false,
+			Float64: 0,
+		}
+	}
+
 	return bigquery.QueryParameter{
 		Name:  name,
 		Value: value,
