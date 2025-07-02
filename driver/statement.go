@@ -171,18 +171,18 @@ func (statement bigQueryStatement) buildParameters(args []driver.Value) ([]bigqu
 }
 
 func buildParameter(arg driver.Value) bigquery.QueryParameter {
+	name := ""
+	value := arg
+
 	namedValue, ok := arg.(driver.NamedValue)
 	if ok {
-		return bigquery.QueryParameter{
-			Name:  namedValue.Name,
-			Value: namedValue.Value,
-		}
+		name = namedValue.Name
+		value = namedValue.Value
 	}
 
-	logrus.Debugf("-param:%s", arg)
-
 	return bigquery.QueryParameter{
-		Value: arg,
+		Name:  name,
+		Value: value,
 	}
 }
 
