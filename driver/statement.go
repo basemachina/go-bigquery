@@ -165,36 +165,36 @@ func (statement bigQueryStatement) buildParameters(args []driver.Value) ([]bigqu
 
 	var parameters []bigquery.QueryParameter
 	for _, arg := range args {
-		parameters = buildParameter(arg, parameters)
+		parameters = append(parameters, buildParameter(arg))
 	}
 	return parameters, nil
 }
 
-func buildParameter(arg driver.Value, parameters []bigquery.QueryParameter) []bigquery.QueryParameter {
+func buildParameter(arg driver.Value) bigquery.QueryParameter {
+	name := ""
+	value := arg
+
 	namedValue, ok := arg.(driver.NamedValue)
 	if ok {
-		return buildParameterFromNamedValue(namedValue, parameters)
+		name = namedValue.Name
+		value = namedValue.Value
 	}
 
-	logrus.Debugf("-param:%s", arg)
+	// Converts nil *float64 values to bigquery.NullFloat64.
+	// This is required by [bigquery.QueryParameter] to represent NULL values.
+	// Currently, this implementation only handles NULL support for float64,
+	// as BaseMachina only requires NULL handling for float64 at this time.
+	f, ok := value.(*float64)
+	if ok && f == nil {
+		value = bigquery.NullFloat64{
+			Valid:   false,
+			Float64: 0,
+		}
+	}
 
-	return append(parameters, bigquery.QueryParameter{
-		Value: arg,
-	})
-}
-
-func buildParameterFromNamedValue(namedValue driver.NamedValue, parameters []bigquery.QueryParameter) []bigquery.QueryParameter {
-	logrus.Debugf("-param:%s=%s", namedValue.Name, namedValue.Value)
-
-	if namedValue.Name == "" {
-		return append(parameters, bigquery.QueryParameter{
-			Value: namedValue.Value,
-		})
-	} else {
-		return append(parameters, bigquery.QueryParameter{
-			Name:  namedValue.Name,
-			Value: namedValue.Value,
-		})
+	return bigquery.QueryParameter{
+		Name:  name,
+		Value: value,
 	}
 }
 
