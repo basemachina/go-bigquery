@@ -64,3 +64,42 @@ func TestConvertBaseMachinaUnsupportedValueToString(t *testing.T) {
 		})
 	}
 }
+
+func TestBigQueryRowsColumnTypeNullable(t *testing.T) {
+	t.Parallel()
+
+	rows := &bigQueryRows{
+		schema: createBigQuerySchema(bigquery.Schema{
+			{Name: "id", Type: bigquery.IntegerFieldType, Required: true},
+			{Name: "name", Type: bigquery.StringFieldType, Required: false},
+		}, nil),
+	}
+
+	tests := map[string]struct {
+		index        int
+		wantNullable bool
+	}{
+		"id column is not nullable": {
+			index:        0,
+			wantNullable: false,
+		},
+		"name column is nullable": {
+			index:        1,
+			wantNullable: true,
+		},
+	}
+
+	for name, tt := range tests {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			nullable, ok := rows.ColumnTypeNullable(tt.index)
+			if nullable != tt.wantNullable {
+				t.Errorf("ColumnTypeNullable() nullable = %v, want %v", nullable, tt.wantNullable)
+			}
+			if !ok {
+				t.Errorf("ColumnTypeNullable() ok = %v, want true", ok)
+			}
+		})
+	}
+}
