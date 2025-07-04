@@ -92,3 +92,10 @@ func (rows *bigQueryRows) ColumnTypeDatabaseTypeName(index int) string {
 	types := rows.schema.columnTypes()
 	return string(types[index])
 }
+
+var _ driver.RowsColumnTypeNullable = (*bigQueryRows)(nil)
+
+func (rows *bigQueryRows) ColumnTypeNullable(index int) (bool, bool) {
+	requiredFlags := rows.schema.RequiredFlags()
+	return !requiredFlags[index], true
+}
