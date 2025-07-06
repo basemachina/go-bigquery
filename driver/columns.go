@@ -12,12 +12,14 @@ type bigQuerySchema interface {
 	ColumnNames() []string
 	ConvertColumnValue(index int, value bigquery.Value) (driver.Value, error)
 	columnTypes() []bigquery.FieldType
+	RequiredFlags() []bool
 }
 
 type bigQueryColumns struct {
-	names   []string
-	columns []bigQueryColumn
-	types   []bigquery.FieldType
+	names         []string
+	columns       []bigQueryColumn
+	types         []bigquery.FieldType
+	requiredFlags []bool
 }
 
 func (columns bigQueryColumns) ConvertColumnValue(index int, value bigquery.Value) (driver.Value, error) {
@@ -35,6 +37,10 @@ func (columns bigQueryColumns) ColumnNames() []string {
 
 func (columns bigQueryColumns) columnTypes() []bigquery.FieldType {
 	return columns.types
+}
+
+func (columns bigQueryColumns) RequiredFlags() []bool {
+	return columns.requiredFlags
 }
 
 type bigQueryReroutedColumn struct {
@@ -81,6 +87,7 @@ func createBigQuerySchema(schema bigquery.Schema, schemaAdaptor adaptor.SchemaAd
 	var names []string
 	var columns []bigQueryColumn
 	var types []bigquery.FieldType
+	var requiredFlags []bool
 	for _, column := range schema {
 
 		name := column.Name
@@ -97,10 +104,12 @@ func createBigQuerySchema(schema bigquery.Schema, schemaAdaptor adaptor.SchemaAd
 			Adaptor: columnAdaptor,
 		})
 		types = append(types, column.Type)
+		requiredFlags = append(requiredFlags, column.Required)
 	}
 	return &bigQueryColumns{
 		names,
 		columns,
 		types,
+		requiredFlags,
 	}
 }
