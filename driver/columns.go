@@ -11,14 +11,14 @@ import (
 type bigQuerySchema interface {
 	ColumnNames() []string
 	ConvertColumnValue(index int, value bigquery.Value) (driver.Value, error)
-	columnTypes() []bigquery.FieldType
+	columnTypes() []string
 	RequiredFlags() []bool
 }
 
 type bigQueryColumns struct {
 	names         []string
 	columns       []bigQueryColumn
-	types         []bigquery.FieldType
+	types         []string
 	requiredFlags []bool
 }
 
@@ -35,7 +35,7 @@ func (columns bigQueryColumns) ColumnNames() []string {
 	return columns.names
 }
 
-func (columns bigQueryColumns) columnTypes() []bigquery.FieldType {
+func (columns bigQueryColumns) columnTypes() []string {
 	return columns.types
 }
 
@@ -86,7 +86,7 @@ func (column bigQueryColumn) ConvertValue(value bigquery.Value) (driver.Value, e
 func createBigQuerySchema(schema bigquery.Schema, schemaAdaptor adaptor.SchemaAdaptor) bigQuerySchema {
 	var names []string
 	var columns []bigQueryColumn
-	var types []bigquery.FieldType
+	var types []string
 	var requiredFlags []bool
 	for _, column := range schema {
 
@@ -103,7 +103,14 @@ func createBigQuerySchema(schema bigquery.Schema, schemaAdaptor adaptor.SchemaAd
 			Schema:  column.Schema,
 			Adaptor: columnAdaptor,
 		})
-		types = append(types, column.Type)
+		if column.Repeated {
+			// For repeated fields (arrays), use Go slice notation like []STRING.
+			// BigQuery's TYPEOF operator returns `ARRAY<STRING>` for repeated STRING columns,
+			// but we format it as `[]STRING` to match Go conventions and simplify parsing.
+			types = append(types, "[]"+string(column.Type))
+		} else {
+			types = append(types, string(column.Type))
+		}
 		requiredFlags = append(requiredFlags, column.Required)
 	}
 	return &bigQueryColumns{

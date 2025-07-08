@@ -90,7 +90,7 @@ var _ driver.RowsColumnTypeDatabaseTypeName = (*bigQueryRows)(nil)
 
 func (rows *bigQueryRows) ColumnTypeDatabaseTypeName(index int) string {
 	types := rows.schema.columnTypes()
-	return string(types[index])
+	return types[index]
 }
 
 var _ driver.RowsColumnTypeNullable = (*bigQueryRows)(nil)
