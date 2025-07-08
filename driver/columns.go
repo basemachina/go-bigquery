@@ -103,7 +103,11 @@ func createBigQuerySchema(schema bigquery.Schema, schemaAdaptor adaptor.SchemaAd
 			Schema:  column.Schema,
 			Adaptor: columnAdaptor,
 		})
-		types = append(types, column.Type)
+		if column.Repeated {
+			types = append(types, "ARRAY")
+		} else {
+			types = append(types, column.Type)
+		}
 		requiredFlags = append(requiredFlags, column.Required)
 	}
 	return &bigQueryColumns{
