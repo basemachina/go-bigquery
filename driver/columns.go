@@ -104,10 +104,8 @@ func createBigQuerySchema(schema bigquery.Schema, schemaAdaptor adaptor.SchemaAd
 			Adaptor: columnAdaptor,
 		})
 		if column.Repeated {
-			// For repeated fields (arrays), use Go slice notation like []STRING.
-			// BigQuery's TYPEOF operator returns `ARRAY<STRING>` for repeated STRING columns,
-			// but we format it as `[]STRING` to match Go conventions and simplify parsing.
-			types = append(types, "[]"+string(column.Type))
+			// For repeated fields (arrays), use BigQuery ARRAY type notation (e.g., ARRAY<STRING>).
+			types = append(types, "ARRAY<"+string(column.Type)+">")
 		} else {
 			types = append(types, string(column.Type))
 		}
