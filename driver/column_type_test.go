@@ -27,7 +27,7 @@ func TestColumnTypeDatabaseTypeName(t *testing.T) {
 		0: "STRING",
 		1: "NUMERIC",
 		2: "BOOLEAN",
-		3: "[]STRING",
+		3: "ARRAY<STRING>",
 	}
 
 	for index, want := range testCases {
