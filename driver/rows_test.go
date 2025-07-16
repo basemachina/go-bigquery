@@ -37,7 +37,7 @@ func TestConvertBaseMachinaUnsupportedValueToString(t *testing.T) {
 		},
 		"bigquery.Value slice": {
 			value:      []bigquery.Value{"a", "b"},
-			wantString: "<ARRAY or STRUCT>",
+			wantString: "（未対応の型の値）",
 			wantBool:   true,
 		},
 		"bigquery.RangeValue": {
