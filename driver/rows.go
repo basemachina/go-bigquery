@@ -11,6 +11,8 @@ import (
 	"google.golang.org/api/iterator"
 )
 
+const ArrayOrStructFallbackString = "<ARRAY or STRUCT>"
+
 type bigQueryRows struct {
 	source  bigQuerySource
 	schema  bigQuerySchema
@@ -78,7 +80,7 @@ func convertBaseMachinaUnsupportedValueToString(value driver.Value) (string, boo
 		return value.String(), true
 	// ARRAY or STRUCT type
 	case []bigquery.Value:
-		return "<ARRAY or STRUCT>", true
+		return ArrayOrStructFallbackString, true
 	// RANGE type
 	case *bigquery.RangeValue:
 		return fmt.Sprintf("%v,%v", value.Start, value.End), true
